@@ -40,7 +40,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IApplication.cs" />
+    <Compile Include="ICulture.cs" />
+    <Compile Include="IEntityType.cs" />
+    <Compile Include="IField.cs" />
     <Compile Include="IModelObject.cs" />
+    <Compile Include="IResource.cs" />
+    <Compile Include="IResourceValue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -51,6 +51,17 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestSetup.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\vfs2poc.Configuration.Interfaces\vfs2poc.Configuration.Interfaces.csproj">
+      <Project>{60f2738e-09f3-43f3-a941-f40b27c662e6}</Project>
+      <Name>vfs2poc.Configuration.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\vfs2poc.Configuration.Model\vfs2poc.Configuration.Model.csproj">
+      <Project>{21e2c207-6a15-4292-b511-3694db7faf85}</Project>
+      <Name>vfs2poc.Configuration.Model</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
