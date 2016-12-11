@@ -4,7 +4,7 @@ using vfs2poc.Configuration.Interfaces;
 namespace vfs2poc.Configuration.Model
 {
     [Serializable]
-    public class Field : ModelObject, IField
+    public abstract class Field : ModelObject, IField
     {
         public string Code { get; set; }
 

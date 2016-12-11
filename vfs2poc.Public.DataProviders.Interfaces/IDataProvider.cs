@@ -1,9 +1,9 @@
-﻿using vfs2poc.Configuration.Model;
+﻿using vfs2poc.Configuration.Interfaces;
 
 namespace vfs2poc.Public.DataProviders.Interfaces
 {
     public interface IDataProvider<T>
     {
-        T GetData(EntityView view);
+        T GetData(IView view);
     }
 }

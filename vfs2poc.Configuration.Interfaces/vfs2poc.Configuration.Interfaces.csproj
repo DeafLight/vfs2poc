@@ -42,6 +42,8 @@
   <ItemGroup>
     <Compile Include="Controls\IControl.cs" />
     <Compile Include="Controls\IFieldControl.cs" />
+    <Compile Include="Fields\IComputedField.cs" />
+    <Compile Include="Fields\IShortTextField.cs" />
     <Compile Include="IApplication.cs" />
     <Compile Include="ICulture.cs" />
     <Compile Include="IEntityType.cs" />

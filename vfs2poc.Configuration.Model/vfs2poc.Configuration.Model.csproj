@@ -45,7 +45,9 @@
     <Compile Include="Controls\FieldControl.cs" />
     <Compile Include="Culture.cs" />
     <Compile Include="EntityType.cs" />
+    <Compile Include="Fields\ComputedField.cs" />
     <Compile Include="Fields\Field.cs" />
+    <Compile Include="Fields\ShortTextField.cs" />
     <Compile Include="ModelObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resource.cs" />
