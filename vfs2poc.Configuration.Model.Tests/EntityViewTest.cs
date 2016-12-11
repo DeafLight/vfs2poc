@@ -7,7 +7,7 @@ using vfs2poc.Public.DataProviders;
 namespace vfs2poc.Configuration.Model.Tests
 {
     [TestClass]
-    public class BasicTest
+    public class EntityViewTest
     {
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]

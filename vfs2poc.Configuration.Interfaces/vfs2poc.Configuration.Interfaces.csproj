@@ -49,6 +49,7 @@
     <Compile Include="IEntityType.cs" />
     <Compile Include="Fields\IField.cs" />
     <Compile Include="IModelObject.cs" />
+    <Compile Include="IRelationType.cs" />
     <Compile Include="IResource.cs" />
     <Compile Include="IResourceValue.cs" />
     <Compile Include="Views\IEntityView.cs" />
