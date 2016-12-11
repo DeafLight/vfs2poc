@@ -40,15 +40,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\IControl.cs" />
+    <Compile Include="Controls\IFieldControl.cs" />
     <Compile Include="IApplication.cs" />
     <Compile Include="ICulture.cs" />
     <Compile Include="IEntityType.cs" />
-    <Compile Include="IField.cs" />
+    <Compile Include="Fields\IField.cs" />
     <Compile Include="IModelObject.cs" />
     <Compile Include="IResource.cs" />
     <Compile Include="IResourceValue.cs" />
+    <Compile Include="Views\IEntityView.cs" />
+    <Compile Include="Views\IView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

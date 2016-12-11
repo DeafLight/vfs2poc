@@ -10,13 +10,13 @@ namespace vfs2poc.Configuration.Model
         public Application()
         {
             Cultures = new List<ICulture>();
-            Fields = new List<IField>();
+            GlobalFields = new List<IField>();
             EntityTypes = new List<IEntityType>();
         }
 
         public IList<ICulture> Cultures { get; set; }
 
-        public IList<IField> Fields { get; set; }
+        public IList<IField> GlobalFields { get; set; }
 
         public IList<IEntityType> EntityTypes { get; set; }
     }

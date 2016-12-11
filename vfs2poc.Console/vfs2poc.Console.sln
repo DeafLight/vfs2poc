@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "vfs2poc.Configuration.Inter
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "vfs2poc.Configuration.Model.Tests", "..\vfs2poc.Configuration.Model.Tests\vfs2poc.Configuration.Model.Tests.csproj", "{0625EFF1-8A37-44C0-A9CB-64D6A6EAD998}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "vfs2poc.Public.DataProviders.Interfaces", "..\vfs2poc.Public.DataProviders.Interfaces\vfs2poc.Public.DataProviders.Interfaces.csproj", "{DA6E7FDE-AA9D-4284-977C-100A7639DC12}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "vfs2poc.Public.DataProviders", "..\vfs2poc.Public.DataProviders\vfs2poc.Public.DataProviders.csproj", "{D9EC7E6B-4392-4347-8E16-C50D8280F12B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{0625EFF1-8A37-44C0-A9CB-64D6A6EAD998}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0625EFF1-8A37-44C0-A9CB-64D6A6EAD998}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0625EFF1-8A37-44C0-A9CB-64D6A6EAD998}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA6E7FDE-AA9D-4284-977C-100A7639DC12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA6E7FDE-AA9D-4284-977C-100A7639DC12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA6E7FDE-AA9D-4284-977C-100A7639DC12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA6E7FDE-AA9D-4284-977C-100A7639DC12}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9EC7E6B-4392-4347-8E16-C50D8280F12B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9EC7E6B-4392-4347-8E16-C50D8280F12B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9EC7E6B-4392-4347-8E16-C50D8280F12B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9EC7E6B-4392-4347-8E16-C50D8280F12B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -9,7 +9,7 @@ namespace vfs2poc.Configuration.Interfaces
         /// <summary>
         /// Global fields, not attached to entity types
         /// </summary>
-        IList<IField> Fields { get; set; }
+        IList<IField> GlobalFields { get; set; }
 
         IList<IEntityType> EntityTypes { get; set; }
     }
