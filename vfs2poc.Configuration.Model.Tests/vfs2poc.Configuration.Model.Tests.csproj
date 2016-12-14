@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="EntityViewTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RelationTypeTest.cs" />
     <Compile Include="RelationViewTest.cs" />
     <Compile Include="TestSetup.cs" />
   </ItemGroup>
