@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using vfs2poc.Configuration.Interfaces;
 
-namespace vfs2poc.Configuration.Model.RelationBuilder
+namespace vfs2poc.Configuration.Model.RelationFluentBuilder
 {
     public class RelationBuilder
     {
@@ -49,11 +49,18 @@ namespace vfs2poc.Configuration.Model.RelationBuilder
                 }
             };
 
-            // TODO: add cardinality
-
             RelationType.Vertices.Add(relationVertexPart.RelationVertex);
 
             return relationVertexPart;
+        }
+
+        public EntityTypePart Node(string alias)
+        {
+            return new EntityTypePart
+            {
+                RelationBuilder = this,
+                EntityType = new KeyValuePair<string, IEntityType>(alias, RelationType.EntityTypes[alias]),
+            };
         }
 
         public RelationType Build()
@@ -80,6 +87,11 @@ namespace vfs2poc.Configuration.Model.RelationBuilder
             RelationBuilder.AddVertex(EntityType.Key, alias, leftMin, leftMax, rightMin, rightMax);
 
             return node;
+        }
+
+        public EntityTypePart GoToNode(string alias)
+        {
+            return RelationBuilder.Node(alias);
         }
 
         public RelationType Build()
