@@ -1,114 +1,133 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using vfs2poc.Configuration.Interfaces;
 
 namespace vfs2poc.Configuration.Model
 {
-    public class RelationType : ModelObject, IRelationType
+    public class RelationType : ConfigObject, IRelationType
     {
         public RelationType()
         {
-            EntityTypes = new Dictionary<string, IEntityType>();
-            Vertices = new List<IRelationVertex>();
+            Nodes = new Dictionary<string, IRelationNode>();
+        }
+
+        public RelationType(string code) : this()
+        {
+            Code = code;
         }
 
         public IApplication Application { get; set; }
 
         public string Code { get; set; }
 
-        public IDictionary<string, IEntityType> EntityTypes { get; set; }
+        public IDictionary<string, IRelationNode> Nodes { get; set; }
 
-        public IList<IRelationVertex> Vertices { get; set; }
-
-        /// <summary>
-        /// Adds or replace an entitytype for a given alias
-        /// </summary>
-        /// <param name="entityType"></param>
-        /// <param name="alias"></param>
-        public void AddEntityType(IEntityType entityType, string alias)
+        public void AddNode(IModelObject modelObject, string discriminant)
         {
-            if (alias == null)
+            if (modelObject == null)
             {
-                throw new ArgumentNullException(nameof(alias));
+                throw new ArgumentNullException(nameof(modelObject));
             }
 
-            if (entityType == null)
+            if (Nodes.ContainsKey(discriminant))
             {
-                throw new ArgumentNullException(nameof(entityType));
+                throw new ArgumentException(nameof(discriminant));
             }
 
-            if (!EntityTypes.ContainsKey(alias))
-            {
-                EntityTypes.Add(alias, entityType);
-            }
+            Nodes.Add(discriminant, new RelationNode(modelObject, discriminant, this));
         }
 
-        public void AddVertex(string aliasLeft, string aliasRight, int? leftMin, int? leftMax, int? rightMin, int? rightMax)
+        public void AddVertex(IRelationNode leftNode, IRelationNode rightNode, ICardinality leftCardinality = null, ICardinality rightCardinality = null)
         {
-            if (leftMin.GetValueOrDefault() > leftMax.GetValueOrDefault(int.MaxValue))
+            if (leftNode == null)
             {
-                throw new ArgumentException($"{nameof(leftMin)} should be less than {nameof(leftMax)}");
+                throw new ArgumentNullException(nameof(leftNode));
             }
 
-            if (rightMin.GetValueOrDefault() > rightMax.GetValueOrDefault(int.MaxValue))
+            if (rightNode == null)
             {
-                throw new ArgumentException($"{nameof(rightMin)} should be less than {nameof(rightMax)}");
+                throw new ArgumentNullException(nameof(rightNode));
             }
 
-            IEntityType nodeLeft, nodeRight;
-            EntityTypes.TryGetValue(aliasLeft, out nodeLeft);
-
-            if (nodeLeft == null)
+            if (leftNode.Vertices.ContainsKey(rightNode.Discriminant) || rightNode.Vertices.ContainsKey(leftNode.Discriminant))
             {
-                throw new ArgumentException(nameof(aliasLeft));
+                throw new ArgumentException(nameof(leftNode.Discriminant));
             }
 
-            EntityTypes.TryGetValue(aliasRight, out nodeRight);
+            var vertex = new RelationVertex(leftNode, rightNode, leftCardinality, rightCardinality);
 
-            if (nodeRight == null)
-            {
-                throw new ArgumentException(nameof(aliasRight));
-            }
-
-            if (!Vertices.Any(x => (x.NodeLeft.Key == aliasLeft && x.NodeRight.Key == aliasRight)
-                || (x.NodeLeft.Key == aliasRight && x.NodeRight.Key == aliasLeft)))
-            {
-                Vertices.Add(new RelationVertex
-                {
-                    NodeLeft = new KeyValuePair<string, IEntityType>(aliasLeft, nodeLeft),
-                    NodeRight = new KeyValuePair<string, IEntityType>(aliasRight, nodeRight),
-                    LeftMin = leftMin,
-                    LeftMax = leftMax,
-                    RightMin = rightMin,
-                    RightMax = rightMax,
-                });
-            }
+            leftNode.Vertices.Add(rightNode.Discriminant, vertex);
+            rightNode.Vertices.Add(leftNode.Discriminant, vertex);
         }
 
-        public IEntityType GetEntityType(string alias)
+        public void AddVertex(string leftDiscriminant, string rightDiscriminant, ICardinality leftCardinality = null, ICardinality rightCardinality = null)
         {
-            IEntityType entityType;
-            EntityTypes.TryGetValue(alias, out entityType);
-
-            return entityType;
+            AddVertex(Nodes[leftDiscriminant], Nodes[rightDiscriminant], leftCardinality, rightCardinality);
         }
 
-        public IRelationVertex GetVertex(string aliasLeft, string aliasRight)
+        public IRelationNode GetNode(string discriminant)
         {
-            return Vertices.FirstOrDefault(x => (x.NodeLeft.Key == aliasLeft && x.NodeRight.Key == aliasRight)
-                || (x.NodeLeft.Key == aliasRight && x.NodeRight.Key == aliasLeft));
+            if (!Nodes.ContainsKey(discriminant))
+            {
+                return null;
+            }
+
+            return Nodes[discriminant];
         }
 
-        public bool RemoveEntityType(string alias)
+        public IRelationVertex GetVertex(IRelationNode leftNode, IRelationNode rightNode)
         {
-            return EntityTypes.Remove(alias);
+            if (leftNode == null)
+            {
+                throw new ArgumentNullException(nameof(leftNode));
+            }
+
+            if (rightNode == null)
+            {
+                throw new ArgumentNullException(nameof(rightNode));
+            }
+
+            return leftNode.GetVertex(rightNode) ?? rightNode.GetVertex(leftNode);
         }
 
-        public bool RemoveVertex(string aliasLeft, string aliasRight)
+        public IRelationVertex GetVertex(string leftDiscriminant, string rightDiscriminant)
         {
-            return Vertices.Remove(Vertices.FirstOrDefault(x => (x.NodeLeft.Key == aliasLeft && x.NodeRight.Key == aliasRight)
-                || (x.NodeLeft.Key == aliasRight && x.NodeRight.Key == aliasLeft)));
+            return GetNode(leftDiscriminant)?.GetVertex(rightDiscriminant) ?? GetNode(rightDiscriminant)?.GetVertex(leftDiscriminant);
+        }
+
+        public bool RemoveNode(IRelationNode node)
+        {
+            if (node == null)
+            {
+                throw new ArgumentNullException(nameof(node));
+            }
+
+            return RemoveNode(node.Discriminant);
+        }
+
+        public bool RemoveNode(string discriminant)
+        {
+            return Nodes.Remove(discriminant);
+        }
+
+        public bool RemoveVertex(IRelationNode leftNode, IRelationNode rightNode)
+        {
+            if (leftNode == null)
+            {
+                throw new ArgumentNullException(nameof(leftNode));
+            }
+
+            if (rightNode == null)
+            {
+                throw new ArgumentNullException(nameof(rightNode));
+            }
+
+            return leftNode.Vertices.Remove(rightNode.Discriminant) & rightNode.Vertices.Remove(leftNode.Discriminant);
+        }
+
+        public bool RemoveVertex(string leftDiscriminant, string rightDiscriminant)
+        {
+            return (GetNode(leftDiscriminant)?.Vertices.Remove(rightDiscriminant)).GetValueOrDefault() & (GetNode(rightDiscriminant)?.Vertices.Remove(leftDiscriminant)).GetValueOrDefault();
         }
     }
 }

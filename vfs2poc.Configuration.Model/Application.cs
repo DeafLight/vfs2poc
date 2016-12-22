@@ -5,7 +5,7 @@ using vfs2poc.Configuration.Interfaces;
 namespace vfs2poc.Configuration.Model
 {
     [Serializable]
-    public class Application : ModelObject, IApplication
+    public class Application : ConfigObject, IApplication
     {
         public Application()
         {

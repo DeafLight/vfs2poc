@@ -31,6 +31,8 @@ namespace vfs2poc.Console
                 System.Console.WriteLine(t.Elapsed.TotalMilliseconds / s.Elapsed.TotalMilliseconds);
             }
 
+            System.Console.WriteLine(new X("a").Equals(new X("b")));
+
             System.Console.ReadLine();
         }
 
@@ -42,5 +44,21 @@ namespace vfs2poc.Console
 
     class X
     {
+        private string truc;
+
+        public X()
+        {
+
+        }
+
+        public X(string truc)
+        {
+            this.truc = truc;
+        }
+
+        public bool Equals(X x)
+        {
+            return x.truc == truc;
+        }
     }
 }

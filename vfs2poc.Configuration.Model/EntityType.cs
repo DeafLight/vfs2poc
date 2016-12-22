@@ -5,11 +5,12 @@ using vfs2poc.Configuration.Interfaces;
 namespace vfs2poc.Configuration.Model
 {
     [Serializable]
-    public class EntityType : ModelObject, IEntityType
+    public class EntityType : ConfigObject, IEntityType
     {
         public EntityType()
         {
             Fields = new List<IField>();
+            Children = new List<IEntityType>();
         }
 
         public IApplication Application { get; set; }

@@ -1,6 +1,6 @@
 ﻿namespace vfs2poc.Configuration.Interfaces
 {
-    public interface IResourceValue : IModelObject
+    public interface IResourceValue : IConfigObject
     {
         string Value { get; set; }
 

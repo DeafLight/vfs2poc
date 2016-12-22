@@ -4,7 +4,7 @@ using vfs2poc.Configuration.Interfaces;
 namespace vfs2poc.Configuration.Model
 {
     [Serializable]
-    public class ResourceValue : ModelObject, IResourceValue
+    public class ResourceValue : ConfigObject, IResourceValue
     {
         public ICulture Culture { get; set; }
 

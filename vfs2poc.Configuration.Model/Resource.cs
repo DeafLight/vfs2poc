@@ -6,7 +6,7 @@ using vfs2poc.Configuration.Interfaces;
 namespace vfs2poc.Configuration.Model
 {
     [Serializable]
-    public class Resource : ModelObject, IResource
+    public class Resource : ConfigObject, IResource
     {
         public Resource()
         {

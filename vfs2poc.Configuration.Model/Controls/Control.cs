@@ -2,7 +2,7 @@
 
 namespace vfs2poc.Configuration.Model
 {
-    public class Control : ModelObject, IControl
+    public class Control : ConfigObject, IControl
     {
     }
 }

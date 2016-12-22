@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using vfs2poc.Configuration.Model;
 
 namespace vfs2poc.Configuration.Interfaces
 {
@@ -9,20 +8,26 @@ namespace vfs2poc.Configuration.Interfaces
 
         string Code { get; set; }
 
-        IDictionary<string, IEntityType> EntityTypes { get; set; }
+        IDictionary<string, IRelationNode> Nodes { get; set; }
 
-        IList<IRelationVertex> Vertices { get; set; }
+        void AddNode(IModelObject modelObject, string alias);
 
-        void AddEntityType(IEntityType entityType, string alias);
+        bool RemoveNode(string alias);
 
-        bool RemoveEntityType(string alias);
+        bool RemoveNode(IRelationNode node);
 
-        IEntityType GetEntityType(string alias);
+        IRelationNode GetNode(string alias);
 
-        void AddVertex(string aliasLeft, string aliasRight, int? leftMin, int? leftMax, int? rightMin, int? rightMax);
+        void AddVertex(string leftAlias, string rightAlias, ICardinality leftCardinality, ICardinality rightCardinality);
 
-        bool RemoveVertex(string aliasLeft, string aliasRight);
+        void AddVertex(IRelationNode leftNode, IRelationNode rightNode, ICardinality leftCardinality, ICardinality rightCardinality);
 
-        IRelationVertex GetVertex(string aliasLeft, string aliasRight);
+        bool RemoveVertex(string leftAlias, string rightAlias);
+
+        bool RemoveVertex(IRelationNode leftNode, IRelationNode rightNode);
+
+        IRelationVertex GetVertex(string leftAlias, string rightAlias);
+
+        IRelationVertex GetVertex(IRelationNode leftNode, IRelationNode rightNode);
     }
 }

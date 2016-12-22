@@ -45,12 +45,16 @@
     <Compile Include="Fields\IComputedField.cs" />
     <Compile Include="Fields\IShortTextField.cs" />
     <Compile Include="IApplication.cs" />
+    <Compile Include="ICardinality.cs" />
     <Compile Include="ICulture.cs" />
     <Compile Include="IEntityType.cs" />
     <Compile Include="Fields\IField.cs" />
+    <Compile Include="IConfigObject.cs" />
     <Compile Include="IModelObject.cs" />
+    <Compile Include="IRelationNode.cs" />
     <Compile Include="IRelationType.cs" />
     <Compile Include="IRelationVertex.cs" />
+    <Compile Include="IRelationView.cs" />
     <Compile Include="IResource.cs" />
     <Compile Include="IResourceValue.cs" />
     <Compile Include="Views\IEntityView.cs" />

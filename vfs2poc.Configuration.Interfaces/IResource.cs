@@ -2,7 +2,7 @@
 
 namespace vfs2poc.Configuration.Interfaces
 {
-    public interface IResource : IModelObject
+    public interface IResource : IConfigObject
     {
         IApplication Application { get; set; }
 

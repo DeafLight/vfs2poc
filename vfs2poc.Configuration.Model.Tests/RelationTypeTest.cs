@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using vfs2poc.Configuration.Model.RelationFluentBuilder;
+using vfs2poc.Configuration.Interfaces;
 
 namespace vfs2poc.Configuration.Model.Tests
 {
@@ -17,12 +18,12 @@ namespace vfs2poc.Configuration.Model.Tests
 
             var relation = new RelationType();
 
-            relation.AddEntityType(a, "A");
+            relation.AddNode(a, "A");
 
-            Assert.AreEqual(relation.EntityTypes.Count, 1);
-            Assert.AreEqual(relation.EntityTypes["A"], a);
+            Assert.AreEqual(relation.Nodes.Count, 1);
+            Assert.AreEqual(relation.GetNode("A").ModelObject, a);
 
-            Assert.AreEqual(relation.Vertices.Count, 0);
+            Assert.AreEqual(relation.Nodes.Values.SelectMany(x => x.Vertices).Select(x => x.Value).Count(), 0);
         }
 
         [TestMethod]
@@ -31,7 +32,7 @@ namespace vfs2poc.Configuration.Model.Tests
         {
             var relation = new RelationType();
 
-            relation.AddEntityType(null, "A");
+            relation.AddNode(null, "A");
         }
 
         [TestMethod]
@@ -45,7 +46,7 @@ namespace vfs2poc.Configuration.Model.Tests
 
             var relation = new RelationType();
 
-            relation.AddEntityType(a, null);
+            relation.AddNode(a, null);
         }
 
         /// <summary>
@@ -64,22 +65,22 @@ namespace vfs2poc.Configuration.Model.Tests
                 Code = "B",
             };
 
-            var relation = RelationBuilder.NewRelation("rel1")
-                .AddNode(a, "A")
-                .JoinsTo(b, "B", 1, 1, 1, 1)
-                .Build();
+            var relation = new RelationType("rel1");
+            relation.AddNode(a, "A");
+            relation.AddNode(b, "B");
+            relation.AddVertex("A", "B", new Cardinality(1, 1), new Cardinality(1, 1));
 
-            Assert.AreEqual(relation.EntityTypes.Count, 2);
-            Assert.AreEqual(relation.GetEntityType("A"), a);
-            Assert.AreEqual(relation.GetEntityType("B"), b);
+            Assert.AreEqual(relation.Nodes.Count, 2);
+            Assert.AreEqual(relation.GetNode("A").ModelObject, a);
+            Assert.AreEqual(relation.GetNode("B").ModelObject, b);
 
-            Assert.AreEqual(relation.Vertices.Count, 1);
+            Assert.AreEqual(relation.Nodes.Values.SelectMany(x => x.Vertices).Select(x => x.Value).Distinct().Count(), 1);
 
             var vertex = relation.GetVertex("A", "B");
-            Assert.AreEqual(vertex.LeftMin, 1);
-            Assert.AreEqual(vertex.LeftMax, 1);
-            Assert.AreEqual(vertex.RightMin, 1);
-            Assert.AreEqual(vertex.RightMax, 1);
+            Assert.AreEqual(vertex.LeftCardinality.Min, 1);
+            Assert.AreEqual(vertex.LeftCardinality.Max, 1);
+            Assert.AreEqual(vertex.RightCardinality.Min, 1);
+            Assert.AreEqual(vertex.RightCardinality.Max, 1);
         }
 
         /// <summary>
@@ -98,22 +99,22 @@ namespace vfs2poc.Configuration.Model.Tests
                 Code = "B",
             };
 
-            var relation = RelationBuilder.NewRelation("rel1")
-                .AddNode(a, "A")
-                .JoinsTo(b, "B", 0, null, 0, null)
-                .Build();
+            var relation = new RelationType("rel1");
+            relation.AddNode(a, "A");
+            relation.AddNode(b, "B");
+            relation.AddVertex("A", "B");
 
-            Assert.AreEqual(relation.EntityTypes.Count, 2);
-            Assert.AreEqual(relation.GetEntityType("A"), a);
-            Assert.AreEqual(relation.GetEntityType("B"), b);
+            Assert.AreEqual(relation.Nodes.Count, 2);
+            Assert.AreEqual(relation.GetNode("A").ModelObject, a);
+            Assert.AreEqual(relation.GetNode("B").ModelObject, b);
 
-            Assert.AreEqual(relation.Vertices.Count, 1);
+            Assert.AreEqual(relation.Nodes.Values.SelectMany(x => x.Vertices).Select(x => x.Value).Distinct().Count(), 1);
 
             var vertex = relation.GetVertex("A", "B");
-            Assert.AreEqual(vertex.LeftMin, 0);
-            Assert.AreEqual(vertex.LeftMax, null);
-            Assert.AreEqual(vertex.RightMin, 0);
-            Assert.AreEqual(vertex.RightMax, null);
+            Assert.AreEqual(vertex.LeftCardinality.Min, 0);
+            Assert.AreEqual(vertex.LeftCardinality.Max, int.MaxValue);
+            Assert.AreEqual(vertex.RightCardinality.Min, 0);
+            Assert.AreEqual(vertex.RightCardinality.Max, int.MaxValue);
         }
 
         /// <summary>
@@ -137,26 +138,27 @@ namespace vfs2poc.Configuration.Model.Tests
                 Code = "C",
             };
 
-            var relation = RelationBuilder.NewRelation("rel1")
-                .AddNode(a, "A")
-                .JoinsTo(b, "B", 0, null, 0, null)
-                .JoinsTo(c, "C", 0, null, 0, null)
-                .Build();
+            var relation = new RelationType("rel1");
+            relation.AddNode(a, "A");
+            relation.AddNode(b, "B");
+            relation.AddNode(c, "C");
+            relation.AddVertex("A", "B");
+            relation.AddVertex("B", "C");
 
-            Assert.AreEqual(relation.EntityTypes.Count, 3);
-            Assert.AreEqual(relation.GetEntityType("A"), a);
-            Assert.AreEqual(relation.GetEntityType("B"), b);
-            Assert.AreEqual(relation.GetEntityType("C"), c);
+            Assert.AreEqual(relation.Nodes.Count, 3);
+            Assert.AreEqual(relation.GetNode("A").ModelObject, a);
+            Assert.AreEqual(relation.GetNode("B").ModelObject, b);
+            Assert.AreEqual(relation.GetNode("C").ModelObject, c);
 
-            Assert.AreEqual(relation.Vertices.Count, 2);
+            Assert.AreEqual(relation.Nodes.Values.SelectMany(x => x.Vertices).Select(x => x.Value).Distinct().Count(), 2);
 
             var abVertex = relation.GetVertex("A", "B");
-            Assert.AreEqual(abVertex.NodeLeft.Key, "A");
-            Assert.AreEqual(abVertex.NodeRight.Key, "B");
+            Assert.AreEqual(abVertex.LeftNode.Discriminant, "A");
+            Assert.AreEqual(abVertex.RightNode.Discriminant, "B");
 
             var bcVertex = relation.GetVertex("B", "C");
-            Assert.AreEqual(bcVertex.NodeLeft.Key, "B");
-            Assert.AreEqual(bcVertex.NodeRight.Key, "C");
+            Assert.AreEqual(bcVertex.LeftNode.Discriminant, "B");
+            Assert.AreEqual(bcVertex.RightNode.Discriminant, "C");
 
             Assert.IsNull(relation.GetVertex("A", "C"));
         }
@@ -183,27 +185,27 @@ namespace vfs2poc.Configuration.Model.Tests
                 Code = "C",
             };
 
-            var relation = RelationBuilder.NewRelation("rel1")
-                .AddNode(a, "A")
-                .JoinsTo(b, "B", 0, null, 0, null)
-                .GoToNode("A")
-                .JoinsTo(c, "C", 0, null, 0, null)
-                .Build();
+            var relation = new RelationType("rel1");
+            relation.AddNode(a, "A");
+            relation.AddNode(b, "B");
+            relation.AddNode(c, "C");
+            relation.AddVertex("A", "B");
+            relation.AddVertex("A", "C");
 
-            Assert.AreEqual(relation.EntityTypes.Count, 3);
-            Assert.AreEqual(relation.GetEntityType("A"), a);
-            Assert.AreEqual(relation.GetEntityType("B"), b);
-            Assert.AreEqual(relation.GetEntityType("C"), c);
+            Assert.AreEqual(relation.Nodes.Count, 3);
+            Assert.AreEqual(relation.GetNode("A").ModelObject, a);
+            Assert.AreEqual(relation.GetNode("B").ModelObject, b);
+            Assert.AreEqual(relation.GetNode("C").ModelObject, c);
 
-            Assert.AreEqual(relation.Vertices.Count, 2);
+            Assert.AreEqual(relation.Nodes.Values.SelectMany(x => x.Vertices).Select(x => x.Value).Distinct().Count(), 2);
 
             var abVertex = relation.GetVertex("A", "B");
-            Assert.AreEqual(abVertex.NodeLeft.Key, "A");
-            Assert.AreEqual(abVertex.NodeRight.Key, "B");
+            Assert.AreEqual(abVertex.LeftNode.Discriminant, "A");
+            Assert.AreEqual(abVertex.RightNode.Discriminant, "B");
 
             var acVertex = relation.GetVertex("A", "C");
-            Assert.AreEqual(acVertex.NodeLeft.Key, "A");
-            Assert.AreEqual(acVertex.NodeRight.Key, "C");
+            Assert.AreEqual(acVertex.LeftNode.Discriminant, "A");
+            Assert.AreEqual(acVertex.RightNode.Discriminant, "C");
 
             Assert.IsNull(relation.GetVertex("B", "C"));
         }

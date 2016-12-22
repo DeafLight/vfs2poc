@@ -2,7 +2,7 @@
 
 namespace vfs2poc.Configuration.Interfaces
 {
-    public interface IView : IModelObject
+    public interface IView : IConfigObject
     {
         IList<IControl> Controls { get; set; }
     }

@@ -1,20 +1,13 @@
-﻿using System.Collections.Generic;
-using vfs2poc.Configuration.Interfaces;
-
-namespace vfs2poc.Configuration.Model
+﻿namespace vfs2poc.Configuration.Interfaces
 {
     public interface IRelationVertex
     {
-        KeyValuePair<string, IEntityType> NodeLeft { get; set; }
+        IRelationNode LeftNode { get; set; }
 
-        KeyValuePair<string, IEntityType> NodeRight { get; set; }
+        IRelationNode RightNode { get; set; }
 
-        int? LeftMin { get; set; }
+        ICardinality LeftCardinality { get; set; }
 
-        int? LeftMax { get; set; }
-
-        int? RightMin { get; set; }
-
-        int? RightMax { get; set; }
+        ICardinality RightCardinality { get; set; }
     }
 }

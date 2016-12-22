@@ -3,7 +3,7 @@ using vfs2poc.Configuration.Interfaces;
 
 namespace vfs2poc.Configuration.Model
 {
-    public abstract class View : ModelObject, IView
+    public abstract class View : ConfigObject, IView
     {
         public View()
         {

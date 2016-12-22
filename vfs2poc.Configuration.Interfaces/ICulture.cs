@@ -1,6 +1,6 @@
 ﻿namespace vfs2poc.Configuration.Interfaces
 {
-    public interface ICulture : IModelObject
+    public interface ICulture : IConfigObject
     {
         IApplication Application { get; set; }
 
